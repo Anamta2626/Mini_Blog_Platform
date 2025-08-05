@@ -24,6 +24,7 @@ const CreateBlog = () => {
       blogData.append("title", formData.title);
       blogData.append("content", formData.content);
       if (formData.image) blogData.append("image", formData.image);
+      blogData.append("author", user.userId); 
 
       await createBlog(blogData, user.token);
       navigate("/dashboard");
