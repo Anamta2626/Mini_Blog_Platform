@@ -24,10 +24,12 @@ export const createBlog = async (formData, token) => {
 };
 
 // ✅ Fetch a blog by ID
+import axios from "axios";
+
 export const fetchBlogById = async (id) => {
-  const res = await axios.get(`${API}/api/blogs/${id}`);
-  return res.data;
+  return await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/blogs/${id}`);
 };
+
 
 // ✅ Delete a blog by ID
 export const deleteBlog = async (id, token) => {
