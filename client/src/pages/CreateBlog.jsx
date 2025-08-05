@@ -17,21 +17,26 @@ const CreateBlog = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const blogData = new FormData();
-      blogData.append("title", formData.title);
-      blogData.append("content", formData.content);
-      if (formData.image) blogData.append("image", formData.image);
-      blogData.append("author", user.userId); 
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const blogData = new FormData();
+    blogData.append("title", formData.title);
+    blogData.append("content", formData.content);
+    if (formData.image) blogData.append("image", formData.image);
 
-      await createBlog(blogData, user.token);
-      navigate("/dashboard");
-    } catch (error) {
-      alert("Failed to create blog");
-    }
-  };
+    // ⛔️ Don't send author manually — token will handle it
+    // blogData.append("author", user.userId); ❌ Remove this
+
+    await createBlog(blogData, user.token);
+    navigate("/dashboard");
+  } catch (error) {
+    alert("Failed to create blog");
+    console.error("Error details:", error.response?.data || error.message);
+  }
+};
+
+
 
   return (
     <div className="container">

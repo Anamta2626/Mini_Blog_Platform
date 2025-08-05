@@ -2,6 +2,8 @@ import Blog from "../models/Blog.js";
 import fs from "fs";
 
 export const createBlog = async (req, res) => {
+  console.log("User in request:", req.user);
+
   try {
     const { title, content } = req.body;
     const image = req.file?.filename;
