@@ -22,7 +22,11 @@ const BlogDetail = () => {
 
       {blog.image && (
         <img
-          src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${blog.image}`}
+          src={
+            blog.image.includes("cloudinary")
+              ? blog.image
+              : `${import.meta.env.VITE_BACKEND_URL}/uploads/${blog.image}`
+          }
           alt={blog.title}
           style={{
             width: "100%",
