@@ -3,8 +3,13 @@ const API = import.meta.env.VITE_BACKEND_URL;
 
 
 export const fetchBlogs = async () => {
-  const res = await axios.get(`${API}/api/blogs`);
-  return res.data; // only return .data here
+  try {
+    const res = await axios.get(`${API}/api/blogs`);
+    return res.data; // ✅ Make sure you're returning actual blog array here
+  } catch (error) {
+    console.error("Error fetching blogs:", error.message);
+    return []; // ✅ Return empty array in case of error
+  }
 };
 
 // ✅ Create a new blog
