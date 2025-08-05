@@ -1,12 +1,9 @@
 import Blog from "../models/Blog.js";
-import fs from "fs";
 
 export const createBlog = async (req, res) => {
-  console.log("User in request:", req.user);
-
   try {
     const { title, content } = req.body;
-    const image = req.file?.filename;
+    const image = req.file?.path; // Cloudinary returns a `path` URL
 
     const newBlog = new Blog({
       title,
@@ -51,10 +48,9 @@ export const updateBlog = async (req, res) => {
 
     blog.title = req.body.title || blog.title;
     blog.content = req.body.content || blog.content;
-    if (req.file?.filename) {
-      // Remove old image
-      if (blog.image) fs.unlinkSync(`uploads/${blog.image}`);
-      blog.image = req.file.filename;
+
+    if (req.file?.path) {
+      blog.image = req.file.path;
     }
 
     await blog.save();
@@ -72,7 +68,6 @@ export const deleteBlog = async (req, res) => {
     if (blog.author.toString() !== req.user.id)
       return res.status(403).json({ message: "Unauthorized" });
 
-    if (blog.image) fs.unlinkSync(`uploads/${blog.image}`);
     await blog.deleteOne();
     res.json({ message: "Blog deleted" });
   } catch (error) {

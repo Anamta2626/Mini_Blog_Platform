@@ -7,7 +7,7 @@ import {
   deleteBlog,
 } from "../controllers/blogController.js";
 import { protect } from "../middleware/authMiddleware.js";
-import { upload } from "../middleware/multerConfig.js";
+import { upload } from "../middleware/cloudinary.js"; // updated
 
 const router = express.Router();
 
