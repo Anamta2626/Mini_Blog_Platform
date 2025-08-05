@@ -1,8 +1,10 @@
 import axios from "axios";
 const API = import.meta.env.VITE_BACKEND_URL;
+
+
 export const fetchBlogs = async () => {
   const res = await axios.get(`${API}/api/blogs`);
-  return res.data;
+  return res.data; // only return .data here
 };
 
 // ✅ Create a new blog
