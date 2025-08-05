@@ -9,6 +9,7 @@ const BlogDetail = () => {
   useEffect(() => {
     const getBlog = async () => {
       const res = await fetchBlogById(id);
+      console.log("Fetched blog:", res.data); // Debug line
       setBlog(res.data);
     };
     getBlog();
@@ -22,11 +23,7 @@ const BlogDetail = () => {
 
       {blog.image && (
         <img
-          src={
-            blog.image.includes("cloudinary")
-              ? blog.image
-              : `${import.meta.env.VITE_BACKEND_URL}/uploads/${blog.image}`
-          }
+          src={blog.image}
           alt={blog.title}
           style={{
             width: "100%",
@@ -39,7 +36,7 @@ const BlogDetail = () => {
       )}
 
       <p style={{ marginBottom: "1rem" }}>{blog.content}</p>
-      <p><strong>Author:</strong> {blog.author.name}</p>
+      <p><strong>Author:</strong> {blog.author?.name || "Unknown"}</p>
     </div>
   );
 };
