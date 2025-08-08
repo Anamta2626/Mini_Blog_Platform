@@ -9,7 +9,7 @@ const BlogDetail = () => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/blogs/${id}`);
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/blogs/${id}`);
         setBlog(res.data.data); // because controller is sending { success: true, data: blog }
       } catch (err) {
         console.error("Error fetching blog:", err);
@@ -27,7 +27,13 @@ const BlogDetail = () => {
       <p className="text-sm text-gray-600 mb-4">
         Author: {blog.author?.name || "Unknown"}
       </p>
-      {blog.image && <img src={blog.image} alt={blog.title} className="mb-4 w-full max-w-md" />}
+      {blog.image && (
+        <img
+          src={blog.image}
+          alt={blog.title}
+          className="mb-4 w-full max-w-md"
+        />
+      )}
       <p>{blog.content}</p>
     </div>
   );
