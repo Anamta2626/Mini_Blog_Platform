@@ -24,7 +24,6 @@ export const createBlog = async (formData, token) => {
 };
 
 // ✅ Fetch a blog by ID
-import axios from "axios";
 
 export const fetchBlogById = async (id) => {
   return await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/blogs/${id}`);
