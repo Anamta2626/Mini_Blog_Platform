@@ -4,22 +4,22 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true); // optional loading state
-  const [error, setError] = useState(null);     // optional error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getBlogs = async () => {
       try {
-        const allBlogs = await fetchBlogs(); // fetchBlogs already returns res.data
-        console.log("Fetched blogs:", allBlogs); // debugging
+        const allBlogs = await fetchBlogs();
         setBlogs(allBlogs);
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching blogs:", err);
         setError("Failed to load blogs");
+      } finally {
         setLoading(false);
       }
     };
+
     getBlogs();
   }, []);
 
@@ -27,7 +27,7 @@ const Home = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="container">
+    <div className="container" style={{ padding: "1rem" }}>
       <h2 style={{ marginBottom: "1.5rem" }}>All Blogs</h2>
       {blogs.length === 0 ? (
         <p>No blogs found.</p>
@@ -48,7 +48,7 @@ const Home = () => {
             {blog.image && (
               <img
                 src={
-                  blog.image.includes("cloudinary") // check if cloudinary URL
+                  blog.image.startsWith("http")
                     ? blog.image
                     : `${import.meta.env.VITE_BACKEND_URL}/uploads/${blog.image}`
                 }
@@ -64,7 +64,9 @@ const Home = () => {
             )}
 
             <p style={{ marginBottom: "0.5rem" }}>
-              {blog.content.slice(0, 150)}...
+              {blog.content.length > 150
+                ? `${blog.content.slice(0, 150)}...`
+                : blog.content}
             </p>
             <Link to={`/blog/${blog._id}`}>Read more →</Link>
           </div>
