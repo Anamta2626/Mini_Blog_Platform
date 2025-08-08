@@ -16,32 +16,33 @@ const EditBlog = () => {
 
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  const loadBlog = async () => {
-    try {
-      const res = await fetchBlogById(id);
+  useEffect(() => {
+    const loadBlog = async () => {
+      try {
+        const res = await fetchBlogById(id);
+        const blog = res.data?.data || res.data;
 
-      // 👇 fix: handle both formats (with or without `data`)
-      const blog = res.data?.data || res.data;
+        if (!blog || !blog.title || !blog.content) {
+          console.error("No data found for blog:", blog);
+          setLoading(false); // handle empty state too
+          return;
+        }
 
-      if (!blog || !blog.title || !blog.content) {
-        console.error("No data found for blog:", blog);
-        return;
+        setFormData({
+          title: blog.title,
+          content: blog.content,
+          image: null, // image not pre-filled
+        });
+
+        setLoading(false); // ✅ blog loaded successfully
+      } catch (err) {
+        console.error("Error loading blog:", err);
+        setLoading(false); // ✅ error occurred
       }
+    };
 
-      setFormData({
-        title: blog.title,
-        content: blog.content,
-        image: null,
-      });
-    } catch (err) {
-      console.error("Error loading blog:", err);
-    }
-  };
-
-  loadBlog();
-}, [id]);
-
+    loadBlog();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;

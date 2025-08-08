@@ -49,10 +49,11 @@ const Home = () => {
             {blog.image && (
               <img
                 src={
-                  blog.image.startsWith("http")
+                  blog.image?.startsWith("http")
                     ? blog.image
                     : `${import.meta.env.VITE_BACKEND_URL}/uploads/${blog.image}`
                 }
+
                 alt={blog.title}
                 style={{
                   width: "100%",
@@ -69,7 +70,10 @@ const Home = () => {
                 ? `${blog.content.slice(0, 150)}...`
                 : blog.content}
             </p>
-            <Link to={`/blog/${blog._id}`}>Read more →</Link>
+            <Link to={`/blog/${blog._id}`}>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded">Read More</button>
+            </Link>
+
           </div>
         ))
       )}

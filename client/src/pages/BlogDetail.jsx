@@ -1,42 +1,34 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchBlogById } from "../services/blog";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const BlogDetail = () => {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
 
   useEffect(() => {
-    const getBlog = async () => {
-      const res = await fetchBlogById(id);
-      console.log("Fetched blog:", res.data); // Debug line
-      setBlog(res.data);
+    const fetchBlog = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/blogs/${id}`);
+        setBlog(res.data.data); // because controller is sending { success: true, data: blog }
+      } catch (err) {
+        console.error("Error fetching blog:", err);
+      }
     };
-    getBlog();
+
+    fetchBlog();
   }, [id]);
 
-  if (!blog) return <p className="container">Loading...</p>;
+  if (!blog) return <div>Loading...</div>;
 
   return (
-    <div className="container">
-      <h2 style={{ marginBottom: "1rem" }}>{blog.title}</h2>
-
-      {blog.image && (
-        <img
-          src={blog.image}
-          alt={blog.title}
-          style={{
-            width: "100%",
-            maxHeight: "400px",
-            objectFit: "cover",
-            borderRadius: "6px",
-            marginBottom: "1rem",
-          }}
-        />
-      )}
-
-      <p style={{ marginBottom: "1rem" }}>{blog.content}</p>
-      <p><strong>Author:</strong> {blog.author?.name || "Unknown"}</p>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-2">{blog.title}</h1>
+      <p className="text-sm text-gray-600 mb-4">
+        Author: {blog.author?.name || "Unknown"}
+      </p>
+      {blog.image && <img src={blog.image} alt={blog.title} className="mb-4 w-full max-w-md" />}
+      <p>{blog.content}</p>
     </div>
   );
 };
